@@ -44,3 +44,69 @@ export function calculateScore(guess: number, actual: number): ScoreResult {
 
   return { points, label, color, direction, percentOff };
 }
+
+interface AbsoluteScoreThresholds {
+  perfect: number;
+  great: number;
+  good: number;
+  close: number;
+}
+
+// calculateScore's percent-off formula divides by `actual`, which breaks whenever `actual`
+// can legitimately be 0 (e.g. island nations with no land borders), and percent-off is a
+// poor fit for small-range values generally (guessing 1 vs. actual 2 borders is already
+// "50% off"; guessing a year 10 off out of ~1800 barely registers). Scores on absolute
+// difference against caller-tuned thresholds instead.
+function calculateAbsoluteDiffScore(
+  guess: number,
+  actual: number,
+  thresholds: AbsoluteScoreThresholds
+): ScoreResult {
+  const diff = Math.abs(guess - actual);
+
+  let points: number;
+  let label: string;
+  let color: string;
+
+  if (diff <= thresholds.perfect) {
+    points = 1000;
+    label = "Perfect!";
+    color = "gold";
+  } else if (diff <= thresholds.great) {
+    points = 700;
+    label = "Great!";
+    color = "green";
+  } else if (diff <= thresholds.good) {
+    points = 400;
+    label = "Good";
+    color = "yellow";
+  } else if (diff <= thresholds.close) {
+    points = 200;
+    label = "Close...";
+    color = "orange";
+  } else {
+    points = 50;
+    label = "Miss!";
+    color = "red";
+  }
+
+  const direction = guess >= actual ? "Too High ↑" : "Too Low ↓";
+  const percentOff = actual === 0 ? (guess === 0 ? 0 : 100) : Math.abs((guess - actual) / actual) * 100;
+
+  return { points, label, color, direction, percentOff };
+}
+
+export function calculateBorderScore(guess: number, actual: number): ScoreResult {
+  return calculateAbsoluteDiffScore(guess, actual, { perfect: 0, great: 1, good: 2, close: 4 });
+}
+
+export function calculateYearScore(guess: number, actual: number): ScoreResult {
+  return calculateAbsoluteDiffScore(guess, actual, { perfect: 5, great: 15, good: 30, close: 75 });
+}
+
+// Construction durations skew heavily toward single-digit years (many famous builds took
+// 1-10 years), so this needs tighter absolute thresholds than calculateYearScore's calendar-year
+// tolerances, or a guess of "5" against an actual of "1" would still read as "Great!".
+export function calculateDurationScore(guess: number, actual: number): ScoreResult {
+  return calculateAbsoluteDiffScore(guess, actual, { perfect: 1, great: 3, good: 7, close: 20 });
+}

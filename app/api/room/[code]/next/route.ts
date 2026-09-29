@@ -1,7 +1,6 @@
 import { NextResponse } from "next/server";
 import { createAdminSupabaseClient } from "@/lib/supabase-admin";
 import { normalizeRoomCode } from "@/lib/room-code";
-import { getRoomQuestion } from "@/lib/room-questions";
 import { broadcastToRoom } from "@/lib/room-broadcast";
 import type { Room, RoomParticipant } from "@/types";
 
@@ -65,16 +64,24 @@ export async function POST(
   }
 
   const nextRoundNumber = room.current_round + 1;
+  const startedAt = new Date().toISOString();
 
   // Same compare-and-swap here: claim the round advance by requiring
   // current_round to still equal what we just read. Whoever loses this
-  // race returns early instead of inserting a second room_rounds row for
-  // the same round_number (which is what produced the duplicate-round bug —
-  // two clients both racing to round_number 2, then a client's later
-  // .single() query matching two rows and erroring as "round not found").
-  // Fetch prior rounds (for the exclude list) in parallel with the claim
-  // attempt — it's only wasted work in the rare case we lose the race.
-  const [{ data: claimed }, { data: priorRounds }] = await Promise.all([
+  // race returns early instead of double-advancing past the same round
+  // (which is what produced the duplicate-round bug — two clients both
+  // racing to round_number 2, then a client's later .single() query
+  // matching two rows and erroring as "round not found").
+  //
+  // The next round's question was already generated up front in
+  // start/route.ts (see the comment there) — every round row for this game
+  // was inserted at game-start time, with round 1 already "started" and the
+  // rest sitting with started_at: null until advanced to. So advancing is
+  // just stamping started_at on the row that's already there (combined with
+  // reading its question_data in the same round trip below) — no per-round
+  // eBay call (or any other external fetch) sits on the critical path
+  // between rounds.
+  const [{ data: claimed }, { data: nextRound }] = await Promise.all([
     admin
       .from("rooms")
       .update({ current_round: nextRoundNumber })
@@ -82,38 +89,21 @@ export async function POST(
       .eq("current_round", room.current_round)
       .select()
       .maybeSingle(),
-    admin.from("room_rounds").select("question_data").eq("room_id", room.id),
+    admin
+      .from("room_rounds")
+      .update({ started_at: startedAt })
+      .eq("room_id", room.id)
+      .eq("round_number", nextRoundNumber)
+      .select("question_data")
+      .single(),
   ]);
 
   if (!claimed) {
     return NextResponse.json({ ok: true, finished: false, alreadyAdvanced: true });
   }
 
-  const exclude = (priorRounds ?? [])
-    .map((r) => (r.question_data as { _excludeId?: string })?._excludeId)
-    .filter((id): id is string => Boolean(id));
-
-  let question;
-  try {
-    question = await getRoomQuestion(room.game_id, exclude);
-  } catch {
-    return NextResponse.json({ error: "failed to fetch a question" }, { status: 502 });
-  }
-  if (!question) {
-    return NextResponse.json({ error: "failed to fetch a question" }, { status: 502 });
-  }
-
-  const startedAt = new Date().toISOString();
-
-  const { error: roundError } = await admin.from("room_rounds").insert({
-    room_id: room.id,
-    round_number: nextRoundNumber,
-    question_data: question.questionData,
-    correct_answer: question.correctAnswer,
-    started_at: startedAt,
-  });
-  if (roundError) {
-    return NextResponse.json({ error: roundError.message }, { status: 500 });
+  if (!nextRound) {
+    return NextResponse.json({ error: "next round wasn't pre-generated" }, { status: 500 });
   }
 
   await broadcastToRoom(code, "round_start", {
@@ -121,7 +111,7 @@ export async function POST(
     totalRounds: room.total_rounds,
     durationSeconds: room.round_duration_seconds,
     startedAt,
-    questionData: question.questionData,
+    questionData: nextRound.question_data,
   });
 
   return NextResponse.json({ ok: true, finished: false });

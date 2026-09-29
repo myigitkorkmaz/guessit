@@ -1,9 +1,16 @@
 // Static snapshot of REST Countries v5 data (api.restcountries.com), fetched 2026-09-09.
+// `borders` (alpha_3 codes of land-bordering countries) was added 2026-09-10, fetched one
+// country at a time from the per-country lookup endpoint (/countries/v5/names.common/{Name})
+// — the list endpoint's pagination (page[size]/page[offset]) is non-functional on this
+// key/plan and always returns the same first 25 countries regardless of params.
 // Population changes slowly enough that a periodic snapshot is fine for a guessing game —
 // this avoids any runtime dependency on the external API (and its 1,000 req/mo free-tier cap).
 // Filtered: population >= 100,000, and must have a renderable shape in the world-atlas 50m topojson
 // (matched via ccn3 == topojson feature id). To refresh, re-run the fetch script against
 // api.restcountries.com/countries/v5 with a valid API key and re-apply the same filters.
+// Note: `borders` counts REST Countries' own entities (e.g. it lists Hong Kong/Macau as
+// separate neighbors of China) rather than sovereign UN member states — taken as-is from
+// the API rather than hand-corrected, consistent with how other fields here aren't second-guessed.
 
 export interface CountryData {
   name: string;
@@ -18,6 +25,7 @@ export interface CountryData {
   capital: string | null;
   lat: number;
   lng: number;
+  borders: string[];
 }
 
 export const COUNTRIES: CountryData[] = [
@@ -33,7 +41,15 @@ export const COUNTRIES: CountryData[] = [
     "areaKm2": 652230,
     "capital": "Kabul",
     "lat": 33,
-    "lng": 65
+    "lng": 65,
+    "borders": [
+      "IRN",
+      "PAK",
+      "TKM",
+      "UZB",
+      "TJK",
+      "CHN"
+    ]
   },
   {
     "name": "Albania",
@@ -47,7 +63,13 @@ export const COUNTRIES: CountryData[] = [
     "areaKm2": 28748,
     "capital": "Tirana",
     "lat": 41,
-    "lng": 20
+    "lng": 20,
+    "borders": [
+      "MNE",
+      "GRC",
+      "MKD",
+      "UNK"
+    ]
   },
   {
     "name": "Algeria",
@@ -61,7 +83,16 @@ export const COUNTRIES: CountryData[] = [
     "areaKm2": 2381741,
     "capital": "Algiers",
     "lat": 28,
-    "lng": 3
+    "lng": 3,
+    "borders": [
+      "TUN",
+      "LBY",
+      "NER",
+      "ESH",
+      "MRT",
+      "MLI",
+      "MAR"
+    ]
   },
   {
     "name": "Angola",
@@ -75,7 +106,13 @@ export const COUNTRIES: CountryData[] = [
     "areaKm2": 1246700,
     "capital": "Luanda",
     "lat": -12.5,
-    "lng": 18.5
+    "lng": 18.5,
+    "borders": [
+      "COG",
+      "COD",
+      "ZMB",
+      "NAM"
+    ]
   },
   {
     "name": "Antigua and Barbuda",
@@ -89,7 +126,8 @@ export const COUNTRIES: CountryData[] = [
     "areaKm2": 442,
     "capital": "Saint John's",
     "lat": 17.05,
-    "lng": -61.8
+    "lng": -61.8,
+    "borders": []
   },
   {
     "name": "Argentina",
@@ -103,7 +141,14 @@ export const COUNTRIES: CountryData[] = [
     "areaKm2": 2780400,
     "capital": "Buenos Aires",
     "lat": -34,
-    "lng": -64
+    "lng": -64,
+    "borders": [
+      "BOL",
+      "BRA",
+      "CHL",
+      "PRY",
+      "URY"
+    ]
   },
   {
     "name": "Armenia",
@@ -117,7 +162,13 @@ export const COUNTRIES: CountryData[] = [
     "areaKm2": 29743,
     "capital": "Yerevan",
     "lat": 40,
-    "lng": 45
+    "lng": 45,
+    "borders": [
+      "AZE",
+      "GEO",
+      "IRN",
+      "TUR"
+    ]
   },
   {
     "name": "Aruba",
@@ -131,7 +182,8 @@ export const COUNTRIES: CountryData[] = [
     "areaKm2": 180,
     "capital": "Oranjestad",
     "lat": 12.5,
-    "lng": -69.96666666
+    "lng": -69.96666666,
+    "borders": []
   },
   {
     "name": "Australia",
@@ -145,7 +197,8 @@ export const COUNTRIES: CountryData[] = [
     "areaKm2": 7692024,
     "capital": "Canberra",
     "lat": -27,
-    "lng": 133
+    "lng": 133,
+    "borders": []
   },
   {
     "name": "Austria",
@@ -159,7 +212,17 @@ export const COUNTRIES: CountryData[] = [
     "areaKm2": 83871,
     "capital": "Vienna",
     "lat": 47.33333333,
-    "lng": 13.33333333
+    "lng": 13.33333333,
+    "borders": [
+      "CZE",
+      "DEU",
+      "HUN",
+      "ITA",
+      "LIE",
+      "SVK",
+      "SVN",
+      "CHE"
+    ]
   },
   {
     "name": "Azerbaijan",
@@ -173,7 +236,14 @@ export const COUNTRIES: CountryData[] = [
     "areaKm2": 86600,
     "capital": "Baku",
     "lat": 40.5,
-    "lng": 47.5
+    "lng": 47.5,
+    "borders": [
+      "ARM",
+      "GEO",
+      "IRN",
+      "RUS",
+      "TUR"
+    ]
   },
   {
     "name": "Bahamas",
@@ -187,7 +257,8 @@ export const COUNTRIES: CountryData[] = [
     "areaKm2": 13943,
     "capital": "Nassau",
     "lat": 25.0343,
-    "lng": -77.3963
+    "lng": -77.3963,
+    "borders": []
   },
   {
     "name": "Bahrain",
@@ -201,7 +272,8 @@ export const COUNTRIES: CountryData[] = [
     "areaKm2": 765,
     "capital": "Manama",
     "lat": 26,
-    "lng": 50.55
+    "lng": 50.55,
+    "borders": []
   },
   {
     "name": "Bangladesh",
@@ -215,7 +287,11 @@ export const COUNTRIES: CountryData[] = [
     "areaKm2": 147570,
     "capital": "Dhaka",
     "lat": 24,
-    "lng": 90
+    "lng": 90,
+    "borders": [
+      "MMR",
+      "IND"
+    ]
   },
   {
     "name": "Barbados",
@@ -229,7 +305,8 @@ export const COUNTRIES: CountryData[] = [
     "areaKm2": 430,
     "capital": "Bridgetown",
     "lat": 13.16666666,
-    "lng": -59.53333333
+    "lng": -59.53333333,
+    "borders": []
   },
   {
     "name": "Belarus",
@@ -243,7 +320,14 @@ export const COUNTRIES: CountryData[] = [
     "areaKm2": 207600,
     "capital": "Minsk",
     "lat": 53,
-    "lng": 28
+    "lng": 28,
+    "borders": [
+      "LVA",
+      "LTU",
+      "POL",
+      "RUS",
+      "UKR"
+    ]
   },
   {
     "name": "Belgium",
@@ -257,7 +341,13 @@ export const COUNTRIES: CountryData[] = [
     "areaKm2": 30528,
     "capital": "Brussels",
     "lat": 50.83333333,
-    "lng": 4
+    "lng": 4,
+    "borders": [
+      "FRA",
+      "DEU",
+      "LUX",
+      "NLD"
+    ]
   },
   {
     "name": "Belize",
@@ -271,7 +361,11 @@ export const COUNTRIES: CountryData[] = [
     "areaKm2": 22966,
     "capital": "Belmopan",
     "lat": 17.25,
-    "lng": -88.75
+    "lng": -88.75,
+    "borders": [
+      "GTM",
+      "MEX"
+    ]
   },
   {
     "name": "Benin",
@@ -285,7 +379,13 @@ export const COUNTRIES: CountryData[] = [
     "areaKm2": 112622,
     "capital": "Porto-Novo",
     "lat": 9.5,
-    "lng": 2.25
+    "lng": 2.25,
+    "borders": [
+      "BFA",
+      "NER",
+      "NGA",
+      "TGO"
+    ]
   },
   {
     "name": "Bhutan",
@@ -299,7 +399,11 @@ export const COUNTRIES: CountryData[] = [
     "areaKm2": 38394,
     "capital": "Thimphu",
     "lat": 27.5,
-    "lng": 90.5
+    "lng": 90.5,
+    "borders": [
+      "CHN",
+      "IND"
+    ]
   },
   {
     "name": "Bolivia",
@@ -313,7 +417,14 @@ export const COUNTRIES: CountryData[] = [
     "areaKm2": 1098581,
     "capital": "Sucre",
     "lat": -17,
-    "lng": -65
+    "lng": -65,
+    "borders": [
+      "ARG",
+      "BRA",
+      "CHL",
+      "PRY",
+      "PER"
+    ]
   },
   {
     "name": "Bosnia and Herzegovina",
@@ -327,7 +438,12 @@ export const COUNTRIES: CountryData[] = [
     "areaKm2": 51209,
     "capital": "Sarajevo",
     "lat": 44,
-    "lng": 18
+    "lng": 18,
+    "borders": [
+      "HRV",
+      "MNE",
+      "SRB"
+    ]
   },
   {
     "name": "Botswana",
@@ -341,7 +457,13 @@ export const COUNTRIES: CountryData[] = [
     "areaKm2": 582000,
     "capital": "Gaborone",
     "lat": -22,
-    "lng": 24
+    "lng": 24,
+    "borders": [
+      "NAM",
+      "ZAF",
+      "ZMB",
+      "ZWE"
+    ]
   },
   {
     "name": "Brazil",
@@ -355,7 +477,19 @@ export const COUNTRIES: CountryData[] = [
     "areaKm2": 8515767,
     "capital": "Brasília",
     "lat": -10,
-    "lng": -55
+    "lng": -55,
+    "borders": [
+      "ARG",
+      "BOL",
+      "COL",
+      "GUF",
+      "GUY",
+      "PRY",
+      "PER",
+      "SUR",
+      "URY",
+      "VEN"
+    ]
   },
   {
     "name": "Brunei",
@@ -369,7 +503,10 @@ export const COUNTRIES: CountryData[] = [
     "areaKm2": 5765,
     "capital": "Bandar Seri Begawan",
     "lat": 4.5,
-    "lng": 114.66666666
+    "lng": 114.66666666,
+    "borders": [
+      "MYS"
+    ]
   },
   {
     "name": "Bulgaria",
@@ -383,7 +520,14 @@ export const COUNTRIES: CountryData[] = [
     "areaKm2": 110879,
     "capital": "Sofia",
     "lat": 43,
-    "lng": 25
+    "lng": 25,
+    "borders": [
+      "GRC",
+      "MKD",
+      "ROU",
+      "SRB",
+      "TUR"
+    ]
   },
   {
     "name": "Burkina Faso",
@@ -397,7 +541,15 @@ export const COUNTRIES: CountryData[] = [
     "areaKm2": 272967,
     "capital": "Ouagadougou",
     "lat": 13,
-    "lng": -2
+    "lng": -2,
+    "borders": [
+      "BEN",
+      "CIV",
+      "GHA",
+      "MLI",
+      "NER",
+      "TGO"
+    ]
   },
   {
     "name": "Burundi",
@@ -411,7 +563,12 @@ export const COUNTRIES: CountryData[] = [
     "areaKm2": 27834,
     "capital": "Gitega",
     "lat": -3.5,
-    "lng": 30
+    "lng": 30,
+    "borders": [
+      "COD",
+      "RWA",
+      "TZA"
+    ]
   },
   {
     "name": "Cabo Verde",
@@ -425,7 +582,8 @@ export const COUNTRIES: CountryData[] = [
     "areaKm2": 4033,
     "capital": "Praia",
     "lat": 16.5388,
-    "lng": -23.0418
+    "lng": -23.0418,
+    "borders": []
   },
   {
     "name": "Cambodia",
@@ -439,7 +597,12 @@ export const COUNTRIES: CountryData[] = [
     "areaKm2": 181035,
     "capital": "Phnom Penh",
     "lat": 13,
-    "lng": 105
+    "lng": 105,
+    "borders": [
+      "LAO",
+      "THA",
+      "VNM"
+    ]
   },
   {
     "name": "Cameroon",
@@ -453,7 +616,15 @@ export const COUNTRIES: CountryData[] = [
     "areaKm2": 475442,
     "capital": "Yaoundé",
     "lat": 6,
-    "lng": 12
+    "lng": 12,
+    "borders": [
+      "CAF",
+      "TCD",
+      "COG",
+      "GNQ",
+      "GAB",
+      "NGA"
+    ]
   },
   {
     "name": "Canada",
@@ -467,7 +638,10 @@ export const COUNTRIES: CountryData[] = [
     "areaKm2": 9984670,
     "capital": "Ottawa",
     "lat": 60,
-    "lng": -95
+    "lng": -95,
+    "borders": [
+      "USA"
+    ]
   },
   {
     "name": "Central African Republic",
@@ -481,7 +655,15 @@ export const COUNTRIES: CountryData[] = [
     "areaKm2": 622984,
     "capital": "Bangui",
     "lat": 7,
-    "lng": 21
+    "lng": 21,
+    "borders": [
+      "CMR",
+      "TCD",
+      "COD",
+      "COG",
+      "SSD",
+      "SDN"
+    ]
   },
   {
     "name": "Chad",
@@ -495,7 +677,15 @@ export const COUNTRIES: CountryData[] = [
     "areaKm2": 1284000,
     "capital": "N'Djamena",
     "lat": 15,
-    "lng": 19
+    "lng": 19,
+    "borders": [
+      "CMR",
+      "CAF",
+      "LBY",
+      "NER",
+      "NGA",
+      "SDN"
+    ]
   },
   {
     "name": "Chile",
@@ -509,7 +699,12 @@ export const COUNTRIES: CountryData[] = [
     "areaKm2": 756102,
     "capital": "Santiago",
     "lat": -30,
-    "lng": -71
+    "lng": -71,
+    "borders": [
+      "ARG",
+      "BOL",
+      "PER"
+    ]
   },
   {
     "name": "China",
@@ -523,7 +718,25 @@ export const COUNTRIES: CountryData[] = [
     "areaKm2": 9706961,
     "capital": "Beijing",
     "lat": 35,
-    "lng": 105
+    "lng": 105,
+    "borders": [
+      "AFG",
+      "BTN",
+      "MMR",
+      "HKG",
+      "IND",
+      "KAZ",
+      "NPL",
+      "PRK",
+      "KGZ",
+      "LAO",
+      "MAC",
+      "MNG",
+      "PAK",
+      "RUS",
+      "TJK",
+      "VNM"
+    ]
   },
   {
     "name": "Colombia",
@@ -537,7 +750,14 @@ export const COUNTRIES: CountryData[] = [
     "areaKm2": 1141748,
     "capital": "Bogotá",
     "lat": 4,
-    "lng": -72
+    "lng": -72,
+    "borders": [
+      "BRA",
+      "ECU",
+      "PAN",
+      "PER",
+      "VEN"
+    ]
   },
   {
     "name": "Comoros",
@@ -551,7 +771,8 @@ export const COUNTRIES: CountryData[] = [
     "areaKm2": 1862,
     "capital": "Moroni",
     "lat": -12.16666666,
-    "lng": 44.25
+    "lng": 44.25,
+    "borders": []
   },
   {
     "name": "Congo",
@@ -565,7 +786,14 @@ export const COUNTRIES: CountryData[] = [
     "areaKm2": 342000,
     "capital": "Brazzaville",
     "lat": -1,
-    "lng": 15
+    "lng": 15,
+    "borders": [
+      "AGO",
+      "CMR",
+      "CAF",
+      "COD",
+      "GAB"
+    ]
   },
   {
     "name": "Costa Rica",
@@ -579,7 +807,11 @@ export const COUNTRIES: CountryData[] = [
     "areaKm2": 51100,
     "capital": "San José",
     "lat": 10,
-    "lng": -84
+    "lng": -84,
+    "borders": [
+      "NIC",
+      "PAN"
+    ]
   },
   {
     "name": "Croatia",
@@ -593,7 +825,14 @@ export const COUNTRIES: CountryData[] = [
     "areaKm2": 56594,
     "capital": "Zagreb",
     "lat": 45.16666666,
-    "lng": 15.5
+    "lng": 15.5,
+    "borders": [
+      "BIH",
+      "HUN",
+      "MNE",
+      "SRB",
+      "SVN"
+    ]
   },
   {
     "name": "Cuba",
@@ -607,7 +846,8 @@ export const COUNTRIES: CountryData[] = [
     "areaKm2": 109884,
     "capital": "Havana",
     "lat": 21.5,
-    "lng": -80
+    "lng": -80,
+    "borders": []
   },
   {
     "name": "Curaçao",
@@ -621,7 +861,8 @@ export const COUNTRIES: CountryData[] = [
     "areaKm2": 444,
     "capital": "Willemstad",
     "lat": 12.116667,
-    "lng": -68.933333
+    "lng": -68.933333,
+    "borders": []
   },
   {
     "name": "Cyprus",
@@ -635,7 +876,8 @@ export const COUNTRIES: CountryData[] = [
     "areaKm2": 9251,
     "capital": "Nicosia",
     "lat": 35,
-    "lng": 33
+    "lng": 33,
+    "borders": []
   },
   {
     "name": "Czechia",
@@ -649,7 +891,13 @@ export const COUNTRIES: CountryData[] = [
     "areaKm2": 78865,
     "capital": "Prague",
     "lat": 49.75,
-    "lng": 15.5
+    "lng": 15.5,
+    "borders": [
+      "AUT",
+      "DEU",
+      "POL",
+      "SVK"
+    ]
   },
   {
     "name": "DRC",
@@ -663,7 +911,18 @@ export const COUNTRIES: CountryData[] = [
     "areaKm2": 2344858,
     "capital": "Kinshasa",
     "lat": 0,
-    "lng": 25
+    "lng": 25,
+    "borders": [
+      "AGO",
+      "BDI",
+      "CAF",
+      "COG",
+      "RWA",
+      "SSD",
+      "TZA",
+      "UGA",
+      "ZMB"
+    ]
   },
   {
     "name": "Denmark",
@@ -677,7 +936,10 @@ export const COUNTRIES: CountryData[] = [
     "areaKm2": 43094,
     "capital": "Copenhagen",
     "lat": 56,
-    "lng": 10
+    "lng": 10,
+    "borders": [
+      "DEU"
+    ]
   },
   {
     "name": "Djibouti",
@@ -691,7 +953,12 @@ export const COUNTRIES: CountryData[] = [
     "areaKm2": 23200,
     "capital": "Djibouti",
     "lat": 11.5,
-    "lng": 43
+    "lng": 43,
+    "borders": [
+      "ERI",
+      "ETH",
+      "SOM"
+    ]
   },
   {
     "name": "Dominican Republic",
@@ -705,7 +972,10 @@ export const COUNTRIES: CountryData[] = [
     "areaKm2": 48671,
     "capital": "Santo Domingo",
     "lat": 19,
-    "lng": -70.66666666
+    "lng": -70.66666666,
+    "borders": [
+      "HTI"
+    ]
   },
   {
     "name": "Ecuador",
@@ -719,7 +989,11 @@ export const COUNTRIES: CountryData[] = [
     "areaKm2": 276841,
     "capital": "Quito",
     "lat": -2,
-    "lng": -77.5
+    "lng": -77.5,
+    "borders": [
+      "COL",
+      "PER"
+    ]
   },
   {
     "name": "Egypt",
@@ -733,7 +1007,13 @@ export const COUNTRIES: CountryData[] = [
     "areaKm2": 1002450,
     "capital": "Cairo",
     "lat": 27,
-    "lng": 30
+    "lng": 30,
+    "borders": [
+      "ISR",
+      "LBY",
+      "PSE",
+      "SDN"
+    ]
   },
   {
     "name": "El Salvador",
@@ -747,7 +1027,11 @@ export const COUNTRIES: CountryData[] = [
     "areaKm2": 21041,
     "capital": "San Salvador",
     "lat": 13.83333333,
-    "lng": -88.91666666
+    "lng": -88.91666666,
+    "borders": [
+      "GTM",
+      "HND"
+    ]
   },
   {
     "name": "Equatorial Guinea",
@@ -761,7 +1045,11 @@ export const COUNTRIES: CountryData[] = [
     "areaKm2": 28051,
     "capital": "Malabo",
     "lat": 2,
-    "lng": 10
+    "lng": 10,
+    "borders": [
+      "CMR",
+      "GAB"
+    ]
   },
   {
     "name": "Eritrea",
@@ -775,7 +1063,12 @@ export const COUNTRIES: CountryData[] = [
     "areaKm2": 117600,
     "capital": "Asmara",
     "lat": 15,
-    "lng": 39
+    "lng": 39,
+    "borders": [
+      "DJI",
+      "ETH",
+      "SDN"
+    ]
   },
   {
     "name": "Estonia",
@@ -789,7 +1082,11 @@ export const COUNTRIES: CountryData[] = [
     "areaKm2": 45227,
     "capital": "Tallinn",
     "lat": 59,
-    "lng": 26
+    "lng": 26,
+    "borders": [
+      "LVA",
+      "RUS"
+    ]
   },
   {
     "name": "Eswatini",
@@ -803,7 +1100,11 @@ export const COUNTRIES: CountryData[] = [
     "areaKm2": 17364,
     "capital": "Mbabane",
     "lat": -26.5,
-    "lng": 31.5
+    "lng": 31.5,
+    "borders": [
+      "MOZ",
+      "ZAF"
+    ]
   },
   {
     "name": "Ethiopia",
@@ -817,7 +1118,15 @@ export const COUNTRIES: CountryData[] = [
     "areaKm2": 1104300,
     "capital": "Addis Ababa",
     "lat": 8,
-    "lng": 38
+    "lng": 38,
+    "borders": [
+      "DJI",
+      "ERI",
+      "KEN",
+      "SOM",
+      "SSD",
+      "SDN"
+    ]
   },
   {
     "name": "Fiji",
@@ -831,7 +1140,8 @@ export const COUNTRIES: CountryData[] = [
     "areaKm2": 18272,
     "capital": "Suva",
     "lat": -17.7134,
-    "lng": 178.065
+    "lng": 178.065,
+    "borders": []
   },
   {
     "name": "Finland",
@@ -845,7 +1155,12 @@ export const COUNTRIES: CountryData[] = [
     "areaKm2": 338424,
     "capital": "Helsinki",
     "lat": 64,
-    "lng": 26
+    "lng": 26,
+    "borders": [
+      "NOR",
+      "SWE",
+      "RUS"
+    ]
   },
   {
     "name": "France",
@@ -859,7 +1174,17 @@ export const COUNTRIES: CountryData[] = [
     "areaKm2": 551695,
     "capital": "Paris",
     "lat": 46,
-    "lng": 2
+    "lng": 2,
+    "borders": [
+      "AND",
+      "BEL",
+      "DEU",
+      "ITA",
+      "LUX",
+      "MCO",
+      "ESP",
+      "CHE"
+    ]
   },
   {
     "name": "French Polynesia",
@@ -873,7 +1198,8 @@ export const COUNTRIES: CountryData[] = [
     "areaKm2": 4167,
     "capital": "Papeetē",
     "lat": -17.6797,
-    "lng": -149.4068
+    "lng": -149.4068,
+    "borders": []
   },
   {
     "name": "Gabon",
@@ -887,7 +1213,12 @@ export const COUNTRIES: CountryData[] = [
     "areaKm2": 267668,
     "capital": "Libreville",
     "lat": -1,
-    "lng": 11.75
+    "lng": 11.75,
+    "borders": [
+      "CMR",
+      "COG",
+      "GNQ"
+    ]
   },
   {
     "name": "Gambia",
@@ -901,7 +1232,10 @@ export const COUNTRIES: CountryData[] = [
     "areaKm2": 10689,
     "capital": "Banjul",
     "lat": 13.46666666,
-    "lng": -16.56666666
+    "lng": -16.56666666,
+    "borders": [
+      "SEN"
+    ]
   },
   {
     "name": "Georgia",
@@ -915,7 +1249,13 @@ export const COUNTRIES: CountryData[] = [
     "areaKm2": 69700,
     "capital": "Tbilisi",
     "lat": 42,
-    "lng": 43.5
+    "lng": 43.5,
+    "borders": [
+      "ARM",
+      "AZE",
+      "RUS",
+      "TUR"
+    ]
   },
   {
     "name": "Germany",
@@ -929,7 +1269,18 @@ export const COUNTRIES: CountryData[] = [
     "areaKm2": 357114,
     "capital": "Berlin",
     "lat": 51,
-    "lng": 9
+    "lng": 9,
+    "borders": [
+      "AUT",
+      "BEL",
+      "CZE",
+      "DNK",
+      "FRA",
+      "LUX",
+      "NLD",
+      "POL",
+      "CHE"
+    ]
   },
   {
     "name": "Ghana",
@@ -943,7 +1294,12 @@ export const COUNTRIES: CountryData[] = [
     "areaKm2": 238533,
     "capital": "Accra",
     "lat": 8,
-    "lng": -2
+    "lng": -2,
+    "borders": [
+      "BFA",
+      "CIV",
+      "TGO"
+    ]
   },
   {
     "name": "Greece",
@@ -957,7 +1313,13 @@ export const COUNTRIES: CountryData[] = [
     "areaKm2": 131990,
     "capital": "Athens",
     "lat": 39,
-    "lng": 22
+    "lng": 22,
+    "borders": [
+      "ALB",
+      "BGR",
+      "TUR",
+      "MKD"
+    ]
   },
   {
     "name": "Grenada",
@@ -971,7 +1333,8 @@ export const COUNTRIES: CountryData[] = [
     "areaKm2": 344,
     "capital": "St. George's",
     "lat": 12.11666666,
-    "lng": -61.66666666
+    "lng": -61.66666666,
+    "borders": []
   },
   {
     "name": "Guam",
@@ -985,7 +1348,8 @@ export const COUNTRIES: CountryData[] = [
     "areaKm2": 549,
     "capital": "Hagåtña",
     "lat": 13.46666666,
-    "lng": 144.78333333
+    "lng": 144.78333333,
+    "borders": []
   },
   {
     "name": "Guatemala",
@@ -999,7 +1363,13 @@ export const COUNTRIES: CountryData[] = [
     "areaKm2": 108889,
     "capital": "Guatemala City",
     "lat": 15.5,
-    "lng": -90.25
+    "lng": -90.25,
+    "borders": [
+      "BLZ",
+      "SLV",
+      "HND",
+      "MEX"
+    ]
   },
   {
     "name": "Guinea",
@@ -1013,7 +1383,15 @@ export const COUNTRIES: CountryData[] = [
     "areaKm2": 245857,
     "capital": "Conakry",
     "lat": 11,
-    "lng": -10
+    "lng": -10,
+    "borders": [
+      "CIV",
+      "GNB",
+      "LBR",
+      "MLI",
+      "SEN",
+      "SLE"
+    ]
   },
   {
     "name": "Guinea-Bissau",
@@ -1027,7 +1405,11 @@ export const COUNTRIES: CountryData[] = [
     "areaKm2": 36125,
     "capital": "Bissau",
     "lat": 12,
-    "lng": -15
+    "lng": -15,
+    "borders": [
+      "GIN",
+      "SEN"
+    ]
   },
   {
     "name": "Guyana",
@@ -1041,7 +1423,12 @@ export const COUNTRIES: CountryData[] = [
     "areaKm2": 214969,
     "capital": "Georgetown",
     "lat": 5,
-    "lng": -59
+    "lng": -59,
+    "borders": [
+      "BRA",
+      "SUR",
+      "VEN"
+    ]
   },
   {
     "name": "Haiti",
@@ -1055,7 +1442,10 @@ export const COUNTRIES: CountryData[] = [
     "areaKm2": 27750,
     "capital": "Port-au-Prince",
     "lat": 19,
-    "lng": -72.41666666
+    "lng": -72.41666666,
+    "borders": [
+      "DOM"
+    ]
   },
   {
     "name": "Honduras",
@@ -1069,7 +1459,12 @@ export const COUNTRIES: CountryData[] = [
     "areaKm2": 112492,
     "capital": "Tegucigalpa",
     "lat": 15,
-    "lng": -86.5
+    "lng": -86.5,
+    "borders": [
+      "GTM",
+      "SLV",
+      "NIC"
+    ]
   },
   {
     "name": "Hong Kong",
@@ -1083,7 +1478,10 @@ export const COUNTRIES: CountryData[] = [
     "areaKm2": 1104,
     "capital": "City of Victoria",
     "lat": 22.267,
-    "lng": 114.188
+    "lng": 114.188,
+    "borders": [
+      "CHN"
+    ]
   },
   {
     "name": "Hungary",
@@ -1097,7 +1495,16 @@ export const COUNTRIES: CountryData[] = [
     "areaKm2": 93028,
     "capital": "Budapest",
     "lat": 47,
-    "lng": 20
+    "lng": 20,
+    "borders": [
+      "AUT",
+      "HRV",
+      "ROU",
+      "SRB",
+      "SVK",
+      "SVN",
+      "UKR"
+    ]
   },
   {
     "name": "Iceland",
@@ -1111,7 +1518,8 @@ export const COUNTRIES: CountryData[] = [
     "areaKm2": 103000,
     "capital": "Reykjavik",
     "lat": 65,
-    "lng": -18
+    "lng": -18,
+    "borders": []
   },
   {
     "name": "India",
@@ -1125,7 +1533,15 @@ export const COUNTRIES: CountryData[] = [
     "areaKm2": 3287590,
     "capital": "New Delhi",
     "lat": 20,
-    "lng": 77
+    "lng": 77,
+    "borders": [
+      "BGD",
+      "BTN",
+      "MMR",
+      "CHN",
+      "NPL",
+      "PAK"
+    ]
   },
   {
     "name": "Indonesia",
@@ -1139,7 +1555,12 @@ export const COUNTRIES: CountryData[] = [
     "areaKm2": 1904569,
     "capital": "Jakarta",
     "lat": -5,
-    "lng": 120
+    "lng": 120,
+    "borders": [
+      "TLS",
+      "MYS",
+      "PNG"
+    ]
   },
   {
     "name": "Iran",
@@ -1153,7 +1574,16 @@ export const COUNTRIES: CountryData[] = [
     "areaKm2": 1648195,
     "capital": "Tehran",
     "lat": 32,
-    "lng": 53
+    "lng": 53,
+    "borders": [
+      "AFG",
+      "ARM",
+      "AZE",
+      "IRQ",
+      "PAK",
+      "TUR",
+      "TKM"
+    ]
   },
   {
     "name": "Iraq",
@@ -1167,7 +1597,15 @@ export const COUNTRIES: CountryData[] = [
     "areaKm2": 438317,
     "capital": "Baghdad",
     "lat": 33,
-    "lng": 44
+    "lng": 44,
+    "borders": [
+      "IRN",
+      "JOR",
+      "KWT",
+      "SAU",
+      "SYR",
+      "TUR"
+    ]
   },
   {
     "name": "Ireland",
@@ -1181,7 +1619,10 @@ export const COUNTRIES: CountryData[] = [
     "areaKm2": 70273,
     "capital": "Dublin",
     "lat": 53,
-    "lng": -8
+    "lng": -8,
+    "borders": [
+      "GBR"
+    ]
   },
   {
     "name": "Israel",
@@ -1195,7 +1636,14 @@ export const COUNTRIES: CountryData[] = [
     "areaKm2": 20770,
     "capital": "Jerusalem",
     "lat": 31.47,
-    "lng": 35.13
+    "lng": 35.13,
+    "borders": [
+      "EGY",
+      "JOR",
+      "LBN",
+      "PSE",
+      "SYR"
+    ]
   },
   {
     "name": "Italy",
@@ -1209,7 +1657,15 @@ export const COUNTRIES: CountryData[] = [
     "areaKm2": 301336,
     "capital": "Rome",
     "lat": 42.83333333,
-    "lng": 12.83333333
+    "lng": 12.83333333,
+    "borders": [
+      "AUT",
+      "FRA",
+      "SMR",
+      "SVN",
+      "CHE",
+      "VAT"
+    ]
   },
   {
     "name": "Ivory Coast",
@@ -1223,7 +1679,14 @@ export const COUNTRIES: CountryData[] = [
     "areaKm2": 322463,
     "capital": "Yamoussoukro",
     "lat": 8,
-    "lng": -5
+    "lng": -5,
+    "borders": [
+      "BFA",
+      "GHA",
+      "GIN",
+      "LBR",
+      "MLI"
+    ]
   },
   {
     "name": "Jamaica",
@@ -1237,7 +1700,8 @@ export const COUNTRIES: CountryData[] = [
     "areaKm2": 10991,
     "capital": "Kingston",
     "lat": 18.25,
-    "lng": -77.5
+    "lng": -77.5,
+    "borders": []
   },
   {
     "name": "Japan",
@@ -1251,7 +1715,8 @@ export const COUNTRIES: CountryData[] = [
     "areaKm2": 377930,
     "capital": "Tokyo",
     "lat": 36,
-    "lng": 138
+    "lng": 138,
+    "borders": []
   },
   {
     "name": "Jersey",
@@ -1265,7 +1730,8 @@ export const COUNTRIES: CountryData[] = [
     "areaKm2": 116,
     "capital": "Saint Helier",
     "lat": 49.25,
-    "lng": -2.16666666
+    "lng": -2.16666666,
+    "borders": []
   },
   {
     "name": "Jordan",
@@ -1279,7 +1745,14 @@ export const COUNTRIES: CountryData[] = [
     "areaKm2": 89342,
     "capital": "Amman",
     "lat": 31,
-    "lng": 36
+    "lng": 36,
+    "borders": [
+      "IRQ",
+      "ISR",
+      "PSE",
+      "SAU",
+      "SYR"
+    ]
   },
   {
     "name": "Kazakhstan",
@@ -1293,7 +1766,14 @@ export const COUNTRIES: CountryData[] = [
     "areaKm2": 2724900,
     "capital": "Astana",
     "lat": 48.0196,
-    "lng": 66.9237
+    "lng": 66.9237,
+    "borders": [
+      "CHN",
+      "KGZ",
+      "RUS",
+      "TKM",
+      "UZB"
+    ]
   },
   {
     "name": "Kenya",
@@ -1307,7 +1787,14 @@ export const COUNTRIES: CountryData[] = [
     "areaKm2": 580367,
     "capital": "Nairobi",
     "lat": 1,
-    "lng": 38
+    "lng": 38,
+    "borders": [
+      "ETH",
+      "SOM",
+      "SSD",
+      "TZA",
+      "UGA"
+    ]
   },
   {
     "name": "Kiribati",
@@ -1321,7 +1808,8 @@ export const COUNTRIES: CountryData[] = [
     "areaKm2": 811,
     "capital": "South Tarawa",
     "lat": 1.41666666,
-    "lng": 173
+    "lng": 173,
+    "borders": []
   },
   {
     "name": "Kuwait",
@@ -1335,7 +1823,11 @@ export const COUNTRIES: CountryData[] = [
     "areaKm2": 17818,
     "capital": "Kuwait City",
     "lat": 29.5,
-    "lng": 45.75
+    "lng": 45.75,
+    "borders": [
+      "IRQ",
+      "SAU"
+    ]
   },
   {
     "name": "Kyrgyzstan",
@@ -1349,7 +1841,13 @@ export const COUNTRIES: CountryData[] = [
     "areaKm2": 199951,
     "capital": "Bishkek",
     "lat": 41,
-    "lng": 75
+    "lng": 75,
+    "borders": [
+      "CHN",
+      "KAZ",
+      "TJK",
+      "UZB"
+    ]
   },
   {
     "name": "Laos",
@@ -1363,7 +1861,14 @@ export const COUNTRIES: CountryData[] = [
     "areaKm2": 236800,
     "capital": "Vientiane",
     "lat": 18,
-    "lng": 105
+    "lng": 105,
+    "borders": [
+      "MMR",
+      "KHM",
+      "CHN",
+      "THA",
+      "VNM"
+    ]
   },
   {
     "name": "Latvia",
@@ -1377,7 +1882,13 @@ export const COUNTRIES: CountryData[] = [
     "areaKm2": 64559,
     "capital": "Riga",
     "lat": 57,
-    "lng": 25
+    "lng": 25,
+    "borders": [
+      "BLR",
+      "EST",
+      "LTU",
+      "RUS"
+    ]
   },
   {
     "name": "Lebanon",
@@ -1391,7 +1902,11 @@ export const COUNTRIES: CountryData[] = [
     "areaKm2": 10452,
     "capital": "Beirut",
     "lat": 33.83333333,
-    "lng": 35.83333333
+    "lng": 35.83333333,
+    "borders": [
+      "ISR",
+      "SYR"
+    ]
   },
   {
     "name": "Lesotho",
@@ -1405,7 +1920,10 @@ export const COUNTRIES: CountryData[] = [
     "areaKm2": 30355,
     "capital": "Maseru",
     "lat": -29.5,
-    "lng": 28.5
+    "lng": 28.5,
+    "borders": [
+      "ZAF"
+    ]
   },
   {
     "name": "Liberia",
@@ -1419,7 +1937,12 @@ export const COUNTRIES: CountryData[] = [
     "areaKm2": 111369,
     "capital": "Monrovia",
     "lat": 6.5,
-    "lng": -9.5
+    "lng": -9.5,
+    "borders": [
+      "GIN",
+      "CIV",
+      "SLE"
+    ]
   },
   {
     "name": "Libya",
@@ -1433,7 +1956,15 @@ export const COUNTRIES: CountryData[] = [
     "areaKm2": 1759540,
     "capital": "Tripoli",
     "lat": 25,
-    "lng": 17
+    "lng": 17,
+    "borders": [
+      "DZA",
+      "TCD",
+      "EGY",
+      "NER",
+      "SDN",
+      "TUN"
+    ]
   },
   {
     "name": "Lithuania",
@@ -1447,7 +1978,13 @@ export const COUNTRIES: CountryData[] = [
     "areaKm2": 65300,
     "capital": "Vilnius",
     "lat": 56,
-    "lng": 24
+    "lng": 24,
+    "borders": [
+      "BLR",
+      "LVA",
+      "POL",
+      "RUS"
+    ]
   },
   {
     "name": "Luxembourg",
@@ -1461,7 +1998,12 @@ export const COUNTRIES: CountryData[] = [
     "areaKm2": 2586,
     "capital": "Luxembourg",
     "lat": 49.75,
-    "lng": 6.16666666
+    "lng": 6.16666666,
+    "borders": [
+      "BEL",
+      "FRA",
+      "DEU"
+    ]
   },
   {
     "name": "Macau",
@@ -1475,7 +2017,10 @@ export const COUNTRIES: CountryData[] = [
     "areaKm2": 30,
     "capital": null,
     "lat": 22.16666666,
-    "lng": 113.55
+    "lng": 113.55,
+    "borders": [
+      "CHN"
+    ]
   },
   {
     "name": "Madagascar",
@@ -1489,7 +2034,8 @@ export const COUNTRIES: CountryData[] = [
     "areaKm2": 587041,
     "capital": "Antananarivo",
     "lat": -20,
-    "lng": 47
+    "lng": 47,
+    "borders": []
   },
   {
     "name": "Malawi",
@@ -1503,7 +2049,12 @@ export const COUNTRIES: CountryData[] = [
     "areaKm2": 118484,
     "capital": "Lilongwe",
     "lat": -13.5,
-    "lng": 34
+    "lng": 34,
+    "borders": [
+      "MOZ",
+      "TZA",
+      "ZMB"
+    ]
   },
   {
     "name": "Malaysia",
@@ -1517,7 +2068,12 @@ export const COUNTRIES: CountryData[] = [
     "areaKm2": 330803,
     "capital": "Kuala Lumpur",
     "lat": 2.5,
-    "lng": 112.5
+    "lng": 112.5,
+    "borders": [
+      "BRN",
+      "IDN",
+      "THA"
+    ]
   },
   {
     "name": "Maldives",
@@ -1531,7 +2087,8 @@ export const COUNTRIES: CountryData[] = [
     "areaKm2": 300,
     "capital": "Malé",
     "lat": 3.25,
-    "lng": 73
+    "lng": 73,
+    "borders": []
   },
   {
     "name": "Mali",
@@ -1545,7 +2102,16 @@ export const COUNTRIES: CountryData[] = [
     "areaKm2": 1240192,
     "capital": "Bamako",
     "lat": 17,
-    "lng": -4
+    "lng": -4,
+    "borders": [
+      "DZA",
+      "BFA",
+      "GIN",
+      "CIV",
+      "MRT",
+      "NER",
+      "SEN"
+    ]
   },
   {
     "name": "Malta",
@@ -1559,7 +2125,8 @@ export const COUNTRIES: CountryData[] = [
     "areaKm2": 316,
     "capital": "Valletta",
     "lat": 35.9375,
-    "lng": 14.3754
+    "lng": 14.3754,
+    "borders": []
   },
   {
     "name": "Mauritania",
@@ -1573,7 +2140,13 @@ export const COUNTRIES: CountryData[] = [
     "areaKm2": 1030700,
     "capital": "Nouakchott",
     "lat": 20,
-    "lng": -12
+    "lng": -12,
+    "borders": [
+      "DZA",
+      "MLI",
+      "SEN",
+      "ESH"
+    ]
   },
   {
     "name": "Mauritius",
@@ -1587,7 +2160,8 @@ export const COUNTRIES: CountryData[] = [
     "areaKm2": 2040,
     "capital": "Port Louis",
     "lat": -20.28333333,
-    "lng": 57.55
+    "lng": 57.55,
+    "borders": []
   },
   {
     "name": "Mexico",
@@ -1601,7 +2175,12 @@ export const COUNTRIES: CountryData[] = [
     "areaKm2": 1964375,
     "capital": "Mexico City",
     "lat": 23,
-    "lng": -102
+    "lng": -102,
+    "borders": [
+      "BLZ",
+      "GTM",
+      "USA"
+    ]
   },
   {
     "name": "Moldova",
@@ -1615,7 +2194,11 @@ export const COUNTRIES: CountryData[] = [
     "areaKm2": 33846,
     "capital": "Chișinău",
     "lat": 47,
-    "lng": 29
+    "lng": 29,
+    "borders": [
+      "ROU",
+      "UKR"
+    ]
   },
   {
     "name": "Mongolia",
@@ -1629,7 +2212,11 @@ export const COUNTRIES: CountryData[] = [
     "areaKm2": 1564110,
     "capital": "Ulan Bator",
     "lat": 46,
-    "lng": 105
+    "lng": 105,
+    "borders": [
+      "CHN",
+      "RUS"
+    ]
   },
   {
     "name": "Montenegro",
@@ -1643,7 +2230,14 @@ export const COUNTRIES: CountryData[] = [
     "areaKm2": 13812,
     "capital": "Podgorica",
     "lat": 42.5,
-    "lng": 19.3
+    "lng": 19.3,
+    "borders": [
+      "ALB",
+      "BIH",
+      "HRV",
+      "UNK",
+      "SRB"
+    ]
   },
   {
     "name": "Morocco",
@@ -1657,7 +2251,12 @@ export const COUNTRIES: CountryData[] = [
     "areaKm2": 446550,
     "capital": "Rabat",
     "lat": 32,
-    "lng": -5
+    "lng": -5,
+    "borders": [
+      "DZA",
+      "ESH",
+      "ESP"
+    ]
   },
   {
     "name": "Mozambique",
@@ -1671,7 +2270,15 @@ export const COUNTRIES: CountryData[] = [
     "areaKm2": 801590,
     "capital": "Maputo",
     "lat": -18.25,
-    "lng": 35
+    "lng": 35,
+    "borders": [
+      "MWI",
+      "ZAF",
+      "SWZ",
+      "TZA",
+      "ZMB",
+      "ZWE"
+    ]
   },
   {
     "name": "Myanmar",
@@ -1685,7 +2292,14 @@ export const COUNTRIES: CountryData[] = [
     "areaKm2": 676578,
     "capital": "Naypyidaw",
     "lat": 22,
-    "lng": 98
+    "lng": 98,
+    "borders": [
+      "BGD",
+      "CHN",
+      "IND",
+      "LAO",
+      "THA"
+    ]
   },
   {
     "name": "Namibia",
@@ -1699,7 +2313,13 @@ export const COUNTRIES: CountryData[] = [
     "areaKm2": 825615,
     "capital": "Windhoek",
     "lat": -22,
-    "lng": 17
+    "lng": 17,
+    "borders": [
+      "AGO",
+      "BWA",
+      "ZAF",
+      "ZMB"
+    ]
   },
   {
     "name": "Nepal",
@@ -1713,7 +2333,11 @@ export const COUNTRIES: CountryData[] = [
     "areaKm2": 147181,
     "capital": "Kathmandu",
     "lat": 28,
-    "lng": 84
+    "lng": 84,
+    "borders": [
+      "CHN",
+      "IND"
+    ]
   },
   {
     "name": "Netherlands",
@@ -1727,7 +2351,11 @@ export const COUNTRIES: CountryData[] = [
     "areaKm2": 41850,
     "capital": "Amsterdam",
     "lat": 52.5,
-    "lng": 5.75
+    "lng": 5.75,
+    "borders": [
+      "BEL",
+      "DEU"
+    ]
   },
   {
     "name": "New Caledonia",
@@ -1741,7 +2369,8 @@ export const COUNTRIES: CountryData[] = [
     "areaKm2": 18575,
     "capital": "Nouméa",
     "lat": -21.5,
-    "lng": 165.5
+    "lng": 165.5,
+    "borders": []
   },
   {
     "name": "New Zealand",
@@ -1755,7 +2384,8 @@ export const COUNTRIES: CountryData[] = [
     "areaKm2": 270467,
     "capital": "Wellington",
     "lat": -41,
-    "lng": 174
+    "lng": 174,
+    "borders": []
   },
   {
     "name": "Nicaragua",
@@ -1769,7 +2399,11 @@ export const COUNTRIES: CountryData[] = [
     "areaKm2": 130373,
     "capital": "Managua",
     "lat": 13,
-    "lng": -85
+    "lng": -85,
+    "borders": [
+      "CRI",
+      "HND"
+    ]
   },
   {
     "name": "Niger",
@@ -1783,7 +2417,16 @@ export const COUNTRIES: CountryData[] = [
     "areaKm2": 1267000,
     "capital": "Niamey",
     "lat": 16,
-    "lng": 8
+    "lng": 8,
+    "borders": [
+      "DZA",
+      "BEN",
+      "BFA",
+      "TCD",
+      "LBY",
+      "MLI",
+      "NGA"
+    ]
   },
   {
     "name": "Nigeria",
@@ -1797,7 +2440,13 @@ export const COUNTRIES: CountryData[] = [
     "areaKm2": 923768,
     "capital": "Abuja",
     "lat": 10,
-    "lng": 8
+    "lng": 8,
+    "borders": [
+      "BEN",
+      "CMR",
+      "TCD",
+      "NER"
+    ]
   },
   {
     "name": "North Korea",
@@ -1811,7 +2460,12 @@ export const COUNTRIES: CountryData[] = [
     "areaKm2": 120538,
     "capital": "Pyongyang",
     "lat": 40,
-    "lng": 127
+    "lng": 127,
+    "borders": [
+      "CHN",
+      "KOR",
+      "RUS"
+    ]
   },
   {
     "name": "North Macedonia",
@@ -1825,7 +2479,14 @@ export const COUNTRIES: CountryData[] = [
     "areaKm2": 25713,
     "capital": "Skopje",
     "lat": 41.83333333,
-    "lng": 22
+    "lng": 22,
+    "borders": [
+      "ALB",
+      "BGR",
+      "GRC",
+      "UNK",
+      "SRB"
+    ]
   },
   {
     "name": "Norway",
@@ -1839,7 +2500,12 @@ export const COUNTRIES: CountryData[] = [
     "areaKm2": 323802,
     "capital": "Oslo",
     "lat": 62,
-    "lng": 10
+    "lng": 10,
+    "borders": [
+      "FIN",
+      "SWE",
+      "RUS"
+    ]
   },
   {
     "name": "Oman",
@@ -1853,7 +2519,12 @@ export const COUNTRIES: CountryData[] = [
     "areaKm2": 309500,
     "capital": "Muscat",
     "lat": 21,
-    "lng": 57
+    "lng": 57,
+    "borders": [
+      "SAU",
+      "ARE",
+      "YEM"
+    ]
   },
   {
     "name": "Pakistan",
@@ -1867,7 +2538,13 @@ export const COUNTRIES: CountryData[] = [
     "areaKm2": 881912,
     "capital": "Islamabad",
     "lat": 30,
-    "lng": 70
+    "lng": 70,
+    "borders": [
+      "AFG",
+      "CHN",
+      "IND",
+      "IRN"
+    ]
   },
   {
     "name": "Palestine",
@@ -1881,7 +2558,12 @@ export const COUNTRIES: CountryData[] = [
     "areaKm2": 6220,
     "capital": "Ramallah",
     "lat": 31.9,
-    "lng": 35.2
+    "lng": 35.2,
+    "borders": [
+      "ISR",
+      "EGY",
+      "JOR"
+    ]
   },
   {
     "name": "Panama",
@@ -1895,7 +2577,11 @@ export const COUNTRIES: CountryData[] = [
     "areaKm2": 75417,
     "capital": "Panama City",
     "lat": 9,
-    "lng": -80
+    "lng": -80,
+    "borders": [
+      "COL",
+      "CRI"
+    ]
   },
   {
     "name": "Papua New Guinea",
@@ -1909,7 +2595,10 @@ export const COUNTRIES: CountryData[] = [
     "areaKm2": 462840,
     "capital": "Port Moresby",
     "lat": -6,
-    "lng": 147
+    "lng": 147,
+    "borders": [
+      "IDN"
+    ]
   },
   {
     "name": "Paraguay",
@@ -1923,7 +2612,12 @@ export const COUNTRIES: CountryData[] = [
     "areaKm2": 406752,
     "capital": "Asunción",
     "lat": -23,
-    "lng": -58
+    "lng": -58,
+    "borders": [
+      "ARG",
+      "BOL",
+      "BRA"
+    ]
   },
   {
     "name": "Peru",
@@ -1937,7 +2631,14 @@ export const COUNTRIES: CountryData[] = [
     "areaKm2": 1285216,
     "capital": "Lima",
     "lat": -10,
-    "lng": -76
+    "lng": -76,
+    "borders": [
+      "BOL",
+      "BRA",
+      "CHL",
+      "COL",
+      "ECU"
+    ]
   },
   {
     "name": "Philippines",
@@ -1951,7 +2652,8 @@ export const COUNTRIES: CountryData[] = [
     "areaKm2": 342353,
     "capital": "Manila",
     "lat": 13,
-    "lng": 122
+    "lng": 122,
+    "borders": []
   },
   {
     "name": "Poland",
@@ -1965,7 +2667,16 @@ export const COUNTRIES: CountryData[] = [
     "areaKm2": 312679,
     "capital": "Warsaw",
     "lat": 52,
-    "lng": 20
+    "lng": 20,
+    "borders": [
+      "BLR",
+      "CZE",
+      "DEU",
+      "LTU",
+      "RUS",
+      "SVK",
+      "UKR"
+    ]
   },
   {
     "name": "Portugal",
@@ -1979,7 +2690,10 @@ export const COUNTRIES: CountryData[] = [
     "areaKm2": 92090,
     "capital": "Lisbon",
     "lat": 39.5,
-    "lng": -8
+    "lng": -8,
+    "borders": [
+      "ESP"
+    ]
   },
   {
     "name": "Puerto Rico",
@@ -1993,7 +2707,8 @@ export const COUNTRIES: CountryData[] = [
     "areaKm2": 8870,
     "capital": "San Juan",
     "lat": 18.25,
-    "lng": -66.5
+    "lng": -66.5,
+    "borders": []
   },
   {
     "name": "Qatar",
@@ -2007,7 +2722,10 @@ export const COUNTRIES: CountryData[] = [
     "areaKm2": 11586,
     "capital": "Doha",
     "lat": 25.5,
-    "lng": 51.25
+    "lng": 51.25,
+    "borders": [
+      "SAU"
+    ]
   },
   {
     "name": "Romania",
@@ -2021,7 +2739,14 @@ export const COUNTRIES: CountryData[] = [
     "areaKm2": 238391,
     "capital": "Bucharest",
     "lat": 46,
-    "lng": 25
+    "lng": 25,
+    "borders": [
+      "BGR",
+      "HUN",
+      "MDA",
+      "SRB",
+      "UKR"
+    ]
   },
   {
     "name": "Russia",
@@ -2035,7 +2760,23 @@ export const COUNTRIES: CountryData[] = [
     "areaKm2": 17098242,
     "capital": "Moscow",
     "lat": 60,
-    "lng": 100
+    "lng": 100,
+    "borders": [
+      "AZE",
+      "BLR",
+      "CHN",
+      "EST",
+      "FIN",
+      "GEO",
+      "KAZ",
+      "PRK",
+      "LVA",
+      "LTU",
+      "MNG",
+      "NOR",
+      "POL",
+      "UKR"
+    ]
   },
   {
     "name": "Rwanda",
@@ -2049,7 +2790,13 @@ export const COUNTRIES: CountryData[] = [
     "areaKm2": 26338,
     "capital": "Kigali",
     "lat": -2,
-    "lng": 30
+    "lng": 30,
+    "borders": [
+      "BDI",
+      "COD",
+      "TZA",
+      "UGA"
+    ]
   },
   {
     "name": "Saint Lucia",
@@ -2063,7 +2810,8 @@ export const COUNTRIES: CountryData[] = [
     "areaKm2": 616,
     "capital": "Castries",
     "lat": 13.88333333,
-    "lng": -60.96666666
+    "lng": -60.96666666,
+    "borders": []
   },
   {
     "name": "Saint Vincent and the Grenadines",
@@ -2077,7 +2825,8 @@ export const COUNTRIES: CountryData[] = [
     "areaKm2": 389,
     "capital": "Kingstown",
     "lat": 13.25,
-    "lng": -61.2
+    "lng": -61.2,
+    "borders": []
   },
   {
     "name": "Samoa",
@@ -2091,7 +2840,8 @@ export const COUNTRIES: CountryData[] = [
     "areaKm2": 2842,
     "capital": "Apia",
     "lat": -13.58333333,
-    "lng": -172.33333333
+    "lng": -172.33333333,
+    "borders": []
   },
   {
     "name": "Saudi Arabia",
@@ -2105,7 +2855,16 @@ export const COUNTRIES: CountryData[] = [
     "areaKm2": 2149690,
     "capital": "Riyadh",
     "lat": 25,
-    "lng": 45
+    "lng": 45,
+    "borders": [
+      "IRQ",
+      "JOR",
+      "KWT",
+      "OMN",
+      "QAT",
+      "ARE",
+      "YEM"
+    ]
   },
   {
     "name": "Senegal",
@@ -2119,7 +2878,14 @@ export const COUNTRIES: CountryData[] = [
     "areaKm2": 196722,
     "capital": "Dakar",
     "lat": 14,
-    "lng": -14
+    "lng": -14,
+    "borders": [
+      "GMB",
+      "GIN",
+      "GNB",
+      "MLI",
+      "MRT"
+    ]
   },
   {
     "name": "Serbia",
@@ -2133,7 +2899,17 @@ export const COUNTRIES: CountryData[] = [
     "areaKm2": 88361,
     "capital": "Belgrade",
     "lat": 44,
-    "lng": 21
+    "lng": 21,
+    "borders": [
+      "BIH",
+      "BGR",
+      "HRV",
+      "HUN",
+      "UNK",
+      "MKD",
+      "MNE",
+      "ROU"
+    ]
   },
   {
     "name": "Seychelles",
@@ -2147,7 +2923,8 @@ export const COUNTRIES: CountryData[] = [
     "areaKm2": 452,
     "capital": "Victoria",
     "lat": -4.58333333,
-    "lng": 55.66666666
+    "lng": 55.66666666,
+    "borders": []
   },
   {
     "name": "Sierra Leone",
@@ -2161,7 +2938,11 @@ export const COUNTRIES: CountryData[] = [
     "areaKm2": 71740,
     "capital": "Freetown",
     "lat": 8.5,
-    "lng": -11.5
+    "lng": -11.5,
+    "borders": [
+      "GIN",
+      "LBR"
+    ]
   },
   {
     "name": "Singapore",
@@ -2175,7 +2956,8 @@ export const COUNTRIES: CountryData[] = [
     "areaKm2": 710,
     "capital": "Singapore",
     "lat": 1.36666666,
-    "lng": 103.8
+    "lng": 103.8,
+    "borders": []
   },
   {
     "name": "Slovakia",
@@ -2189,7 +2971,14 @@ export const COUNTRIES: CountryData[] = [
     "areaKm2": 49037,
     "capital": "Bratislava",
     "lat": 48.66666666,
-    "lng": 19.5
+    "lng": 19.5,
+    "borders": [
+      "AUT",
+      "CZE",
+      "HUN",
+      "POL",
+      "UKR"
+    ]
   },
   {
     "name": "Slovenia",
@@ -2203,7 +2992,13 @@ export const COUNTRIES: CountryData[] = [
     "areaKm2": 20273,
     "capital": "Ljubljana",
     "lat": 46.11666666,
-    "lng": 14.81666666
+    "lng": 14.81666666,
+    "borders": [
+      "AUT",
+      "HRV",
+      "ITA",
+      "HUN"
+    ]
   },
   {
     "name": "Solomon Islands",
@@ -2217,7 +3012,8 @@ export const COUNTRIES: CountryData[] = [
     "areaKm2": 28896,
     "capital": "Honiara",
     "lat": -8,
-    "lng": 159
+    "lng": 159,
+    "borders": []
   },
   {
     "name": "Somalia",
@@ -2231,7 +3027,12 @@ export const COUNTRIES: CountryData[] = [
     "areaKm2": 637657,
     "capital": "Mogadishu",
     "lat": 10,
-    "lng": 49
+    "lng": 49,
+    "borders": [
+      "DJI",
+      "ETH",
+      "KEN"
+    ]
   },
   {
     "name": "South Africa",
@@ -2245,7 +3046,15 @@ export const COUNTRIES: CountryData[] = [
     "areaKm2": 1221037,
     "capital": "Pretoria",
     "lat": -29,
-    "lng": 24
+    "lng": 24,
+    "borders": [
+      "BWA",
+      "LSO",
+      "MOZ",
+      "NAM",
+      "SWZ",
+      "ZWE"
+    ]
   },
   {
     "name": "South Korea",
@@ -2259,7 +3068,10 @@ export const COUNTRIES: CountryData[] = [
     "areaKm2": 100210,
     "capital": "Seoul",
     "lat": 37,
-    "lng": 127.5
+    "lng": 127.5,
+    "borders": [
+      "PRK"
+    ]
   },
   {
     "name": "South Sudan",
@@ -2273,7 +3085,15 @@ export const COUNTRIES: CountryData[] = [
     "areaKm2": 619745,
     "capital": "Juba",
     "lat": 7,
-    "lng": 30
+    "lng": 30,
+    "borders": [
+      "CAF",
+      "COD",
+      "ETH",
+      "KEN",
+      "SDN",
+      "UGA"
+    ]
   },
   {
     "name": "Spain",
@@ -2287,7 +3107,14 @@ export const COUNTRIES: CountryData[] = [
     "areaKm2": 505992,
     "capital": "Madrid",
     "lat": 40,
-    "lng": -4
+    "lng": -4,
+    "borders": [
+      "AND",
+      "FRA",
+      "GIB",
+      "PRT",
+      "MAR"
+    ]
   },
   {
     "name": "Sri Lanka",
@@ -2301,7 +3128,8 @@ export const COUNTRIES: CountryData[] = [
     "areaKm2": 65610,
     "capital": "Sri Jayawardenepura Kotte",
     "lat": 7,
-    "lng": 81
+    "lng": 81,
+    "borders": []
   },
   {
     "name": "Sudan",
@@ -2315,7 +3143,16 @@ export const COUNTRIES: CountryData[] = [
     "areaKm2": 1886068,
     "capital": "Khartoum",
     "lat": 15,
-    "lng": 30
+    "lng": 30,
+    "borders": [
+      "CAF",
+      "TCD",
+      "EGY",
+      "ERI",
+      "ETH",
+      "LBY",
+      "SSD"
+    ]
   },
   {
     "name": "Suriname",
@@ -2329,7 +3166,12 @@ export const COUNTRIES: CountryData[] = [
     "areaKm2": 163820,
     "capital": "Paramaribo",
     "lat": 4,
-    "lng": -56
+    "lng": -56,
+    "borders": [
+      "BRA",
+      "GUF",
+      "GUY"
+    ]
   },
   {
     "name": "Sweden",
@@ -2343,7 +3185,11 @@ export const COUNTRIES: CountryData[] = [
     "areaKm2": 450295,
     "capital": "Stockholm",
     "lat": 62,
-    "lng": 15
+    "lng": 15,
+    "borders": [
+      "FIN",
+      "NOR"
+    ]
   },
   {
     "name": "Switzerland",
@@ -2357,7 +3203,14 @@ export const COUNTRIES: CountryData[] = [
     "areaKm2": 41284,
     "capital": "Bern",
     "lat": 47,
-    "lng": 8
+    "lng": 8,
+    "borders": [
+      "AUT",
+      "FRA",
+      "ITA",
+      "LIE",
+      "DEU"
+    ]
   },
   {
     "name": "Syria",
@@ -2371,7 +3224,14 @@ export const COUNTRIES: CountryData[] = [
     "areaKm2": 185180,
     "capital": "Damascus",
     "lat": 35,
-    "lng": 38
+    "lng": 38,
+    "borders": [
+      "IRQ",
+      "ISR",
+      "JOR",
+      "LBN",
+      "TUR"
+    ]
   },
   {
     "name": "São Tomé and Príncipe",
@@ -2385,7 +3245,8 @@ export const COUNTRIES: CountryData[] = [
     "areaKm2": 964,
     "capital": "São Tomé",
     "lat": 1,
-    "lng": 7
+    "lng": 7,
+    "borders": []
   },
   {
     "name": "Taiwan",
@@ -2399,7 +3260,8 @@ export const COUNTRIES: CountryData[] = [
     "areaKm2": 36193,
     "capital": "Taipei",
     "lat": 23.5,
-    "lng": 121
+    "lng": 121,
+    "borders": []
   },
   {
     "name": "Tajikistan",
@@ -2413,7 +3275,13 @@ export const COUNTRIES: CountryData[] = [
     "areaKm2": 143100,
     "capital": "Dushanbe",
     "lat": 39,
-    "lng": 71
+    "lng": 71,
+    "borders": [
+      "AFG",
+      "CHN",
+      "KGZ",
+      "UZB"
+    ]
   },
   {
     "name": "Tanzania",
@@ -2427,7 +3295,17 @@ export const COUNTRIES: CountryData[] = [
     "areaKm2": 945087,
     "capital": "Dodoma",
     "lat": -6,
-    "lng": 35
+    "lng": 35,
+    "borders": [
+      "BDI",
+      "COD",
+      "KEN",
+      "MWI",
+      "MOZ",
+      "RWA",
+      "UGA",
+      "ZMB"
+    ]
   },
   {
     "name": "Thailand",
@@ -2441,7 +3319,13 @@ export const COUNTRIES: CountryData[] = [
     "areaKm2": 513120,
     "capital": "Bangkok",
     "lat": 15,
-    "lng": 100
+    "lng": 100,
+    "borders": [
+      "MMR",
+      "KHM",
+      "LAO",
+      "MYS"
+    ]
   },
   {
     "name": "Timor-Leste",
@@ -2455,7 +3339,10 @@ export const COUNTRIES: CountryData[] = [
     "areaKm2": 14874,
     "capital": "Dili",
     "lat": -8.83333333,
-    "lng": 125.91666666
+    "lng": 125.91666666,
+    "borders": [
+      "IDN"
+    ]
   },
   {
     "name": "Togo",
@@ -2469,7 +3356,12 @@ export const COUNTRIES: CountryData[] = [
     "areaKm2": 56785,
     "capital": "Lomé",
     "lat": 8,
-    "lng": 1.16666666
+    "lng": 1.16666666,
+    "borders": [
+      "BEN",
+      "BFA",
+      "GHA"
+    ]
   },
   {
     "name": "Tonga",
@@ -2483,7 +3375,8 @@ export const COUNTRIES: CountryData[] = [
     "areaKm2": 747,
     "capital": "Nuku'alofa",
     "lat": -20,
-    "lng": -175
+    "lng": -175,
+    "borders": []
   },
   {
     "name": "Trinidad and Tobago",
@@ -2497,7 +3390,8 @@ export const COUNTRIES: CountryData[] = [
     "areaKm2": 5130,
     "capital": "Port of Spain",
     "lat": 10.6918,
-    "lng": -61.2225
+    "lng": -61.2225,
+    "borders": []
   },
   {
     "name": "Tunisia",
@@ -2511,7 +3405,11 @@ export const COUNTRIES: CountryData[] = [
     "areaKm2": 163610,
     "capital": "Tunis",
     "lat": 34,
-    "lng": 9
+    "lng": 9,
+    "borders": [
+      "DZA",
+      "LBY"
+    ]
   },
   {
     "name": "Turkey",
@@ -2525,7 +3423,17 @@ export const COUNTRIES: CountryData[] = [
     "areaKm2": 783562,
     "capital": "Ankara",
     "lat": 39,
-    "lng": 35
+    "lng": 35,
+    "borders": [
+      "ARM",
+      "AZE",
+      "BGR",
+      "GEO",
+      "GRC",
+      "IRN",
+      "IRQ",
+      "SYR"
+    ]
   },
   {
     "name": "Turkmenistan",
@@ -2539,7 +3447,13 @@ export const COUNTRIES: CountryData[] = [
     "areaKm2": 488100,
     "capital": "Ashgabat",
     "lat": 40,
-    "lng": 60
+    "lng": 60,
+    "borders": [
+      "AFG",
+      "IRN",
+      "KAZ",
+      "UZB"
+    ]
   },
   {
     "name": "Uganda",
@@ -2553,7 +3467,14 @@ export const COUNTRIES: CountryData[] = [
     "areaKm2": 241550,
     "capital": "Kampala",
     "lat": 1,
-    "lng": 32
+    "lng": 32,
+    "borders": [
+      "COD",
+      "KEN",
+      "RWA",
+      "SSD",
+      "TZA"
+    ]
   },
   {
     "name": "Ukraine",
@@ -2567,7 +3488,16 @@ export const COUNTRIES: CountryData[] = [
     "areaKm2": 603500,
     "capital": "Kyiv",
     "lat": 49,
-    "lng": 32
+    "lng": 32,
+    "borders": [
+      "BLR",
+      "HUN",
+      "MDA",
+      "POL",
+      "ROU",
+      "RUS",
+      "SVK"
+    ]
   },
   {
     "name": "United Arab Emirates",
@@ -2581,7 +3511,11 @@ export const COUNTRIES: CountryData[] = [
     "areaKm2": 83600,
     "capital": "Abu Dhabi",
     "lat": 24,
-    "lng": 54
+    "lng": 54,
+    "borders": [
+      "OMN",
+      "SAU"
+    ]
   },
   {
     "name": "United Kingdom",
@@ -2595,7 +3529,10 @@ export const COUNTRIES: CountryData[] = [
     "areaKm2": 242900,
     "capital": "London",
     "lat": 54,
-    "lng": -2
+    "lng": -2,
+    "borders": [
+      "IRL"
+    ]
   },
   {
     "name": "United States",
@@ -2609,7 +3546,11 @@ export const COUNTRIES: CountryData[] = [
     "areaKm2": 9372610,
     "capital": "Washington, D.C.",
     "lat": 38,
-    "lng": -97
+    "lng": -97,
+    "borders": [
+      "CAN",
+      "MEX"
+    ]
   },
   {
     "name": "Uruguay",
@@ -2623,7 +3564,11 @@ export const COUNTRIES: CountryData[] = [
     "areaKm2": 181034,
     "capital": "Montevideo",
     "lat": -33,
-    "lng": -56
+    "lng": -56,
+    "borders": [
+      "ARG",
+      "BRA"
+    ]
   },
   {
     "name": "Uzbekistan",
@@ -2637,7 +3582,14 @@ export const COUNTRIES: CountryData[] = [
     "areaKm2": 447400,
     "capital": "Tashkent",
     "lat": 41,
-    "lng": 64
+    "lng": 64,
+    "borders": [
+      "AFG",
+      "KAZ",
+      "KGZ",
+      "TJK",
+      "TKM"
+    ]
   },
   {
     "name": "Vanuatu",
@@ -2651,7 +3603,8 @@ export const COUNTRIES: CountryData[] = [
     "areaKm2": 12189,
     "capital": "Port Vila",
     "lat": -16,
-    "lng": 167
+    "lng": 167,
+    "borders": []
   },
   {
     "name": "Venezuela",
@@ -2665,7 +3618,12 @@ export const COUNTRIES: CountryData[] = [
     "areaKm2": 916445,
     "capital": "Caracas",
     "lat": 8,
-    "lng": -66
+    "lng": -66,
+    "borders": [
+      "BRA",
+      "COL",
+      "GUY"
+    ]
   },
   {
     "name": "Vietnam",
@@ -2679,7 +3637,12 @@ export const COUNTRIES: CountryData[] = [
     "areaKm2": 331212,
     "capital": "Hanoi",
     "lat": 16.16666666,
-    "lng": 107.83333333
+    "lng": 107.83333333,
+    "borders": [
+      "KHM",
+      "CHN",
+      "LAO"
+    ]
   },
   {
     "name": "Western Sahara",
@@ -2693,7 +3656,12 @@ export const COUNTRIES: CountryData[] = [
     "areaKm2": 266000,
     "capital": "El Aaiún",
     "lat": 24.5,
-    "lng": -13
+    "lng": -13,
+    "borders": [
+      "DZA",
+      "MRT",
+      "MAR"
+    ]
   },
   {
     "name": "Yemen",
@@ -2707,7 +3675,11 @@ export const COUNTRIES: CountryData[] = [
     "areaKm2": 527968,
     "capital": "Sana'a",
     "lat": 15,
-    "lng": 48
+    "lng": 48,
+    "borders": [
+      "OMN",
+      "SAU"
+    ]
   },
   {
     "name": "Zambia",
@@ -2721,7 +3693,17 @@ export const COUNTRIES: CountryData[] = [
     "areaKm2": 752612,
     "capital": "Lusaka",
     "lat": -15,
-    "lng": 30
+    "lng": 30,
+    "borders": [
+      "AGO",
+      "BWA",
+      "COD",
+      "MWI",
+      "MOZ",
+      "NAM",
+      "TZA",
+      "ZWE"
+    ]
   },
   {
     "name": "Zimbabwe",
@@ -2735,6 +3717,12 @@ export const COUNTRIES: CountryData[] = [
     "areaKm2": 390757,
     "capital": "Harare",
     "lat": -20,
-    "lng": 30
+    "lng": 30,
+    "borders": [
+      "BWA",
+      "MOZ",
+      "ZAF",
+      "ZMB"
+    ]
   }
 ];

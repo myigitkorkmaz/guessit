@@ -33,8 +33,42 @@ export default function PriceDropPage() {
   const [activeImage, setActiveImage] = useState(0);
   const [isLightboxOpen, setIsLightboxOpen] = useState(false);
   const [zoom, setZoom] = useState(MIN_ZOOM);
+  // Rounds 2..MAX_ROUNDS, filled in by a background fetch loop while round 1 is on screen —
+  // preloaded[0] holds round 2's listing, preloaded[1] holds round 3's, etc. Unlike the other
+  // games (static local data, cheap to fetch all rounds at once up front), PriceDrop calls the
+  // real eBay API per listing, so fetching all 5 rounds before showing anything would make the
+  // player wait on 5 sequential external requests before round 1 even appears. Loading round 1
+  // immediately and prefetching the rest in the background gets the same "no wait between
+  // rounds" result without that up-front delay.
+  const [preloaded, setPreloaded] = useState<Listing[]>([]);
   const usedQueries = useRef<string[]>([]);
+  // Guards the background preload loop against a Play Again that resets state while a previous
+  // playthrough's loop is still in flight — a stale loop finishing late would otherwise push its
+  // results into the new playthrough's (freshly-reset) queue and exclude list.
+  const preloadGenRef = useRef(0);
 
+  const backgroundPreload = useCallback((gen: number) => {
+    (async () => {
+      for (let i = 1; i < MAX_ROUNDS; i++) {
+        if (preloadGenRef.current !== gen) return;
+        try {
+          const params = new URLSearchParams({ exclude: usedQueries.current.join(",") });
+          const res = await fetch(`/api/pricedrop/random?${params.toString()}`);
+          if (!res.ok) return;
+          const data = await res.json();
+          if (preloadGenRef.current !== gen) return;
+          usedQueries.current = [...usedQueries.current, data.searchQuery];
+          setPreloaded((prev) => [...prev, data]);
+        } catch {
+          return;
+        }
+      }
+    })();
+  }, []);
+
+  // Fetches a single listing on demand — used for the very first round, for "Surprise Me"
+  // (an explicit override of the current round, independent of the preload queue), and as a
+  // fallback if a player somehow reaches a round the background preload hasn't produced yet.
   const fetchListing = useCallback(async (options?: { surprise?: boolean }) => {
     setPhase("loading");
     setGuess("");
@@ -55,10 +89,22 @@ export default function PriceDropPage() {
     }
   }, []);
 
+  const fetchFirstListing = useCallback(async () => {
+    const gen = ++preloadGenRef.current;
+    usedQueries.current = [];
+    setPreloaded([]);
+    await fetchListing();
+    // Only start background prefetching if round 1 actually loaded — fetchListing pushes
+    // onto usedQueries only on success, so an empty list here means it hit the error phase.
+    if (usedQueries.current.length > 0) {
+      backgroundPreload(gen);
+    }
+  }, [fetchListing, backgroundPreload]);
+
   useEffect(() => {
     // eslint-disable-next-line react-hooks/set-state-in-effect -- intentional fetch-on-mount, not a derived-state effect
-    fetchListing();
-  }, [fetchListing]);
+    fetchFirstListing();
+  }, [fetchFirstListing]);
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
@@ -77,15 +123,28 @@ export default function PriceDropPage() {
       setPhase("gameover");
       return;
     }
-    setRound((prev) => prev + 1);
-    fetchListing();
+    const nextRound = round + 1;
+    // preloaded[0] holds round 2's listing, preloaded[1] holds round 3's, etc.
+    const preloadedIndex = nextRound - 2;
+    const next = preloaded[preloadedIndex];
+    setRound(nextRound);
+    if (next) {
+      setListing(next);
+      setGuess("");
+      setResult(null);
+      setActiveImage(0);
+      setPhase("guessing");
+    } else {
+      // Background preload hasn't reached this round yet (should be rare — it starts as
+      // soon as round 1 loads). Fetch it directly rather than leaving the player stuck.
+      fetchListing();
+    }
   };
 
   const handlePlayAgain = () => {
     setRound(1);
     setTotalScore(0);
-    usedQueries.current = [];
-    fetchListing();
+    fetchFirstListing();
   };
 
   const handleSurpriseMe = () => {

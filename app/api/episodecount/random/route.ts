@@ -1,13 +1,15 @@
 import { NextResponse } from "next/server";
-import { getRandomShow } from "@/lib/tv-shows";
+import { getRandomShow, getRandomShows } from "@/lib/tv-shows";
 
 export const dynamic = "force-dynamic";
 
 export async function GET(request: Request) {
-  const exclude = (new URL(request.url).searchParams.get("exclude") ?? "")
-    .split(",")
-    .filter(Boolean);
+  const { searchParams } = new URL(request.url);
+  const exclude = (searchParams.get("exclude") ?? "").split(",").filter(Boolean);
+  const count = Math.max(1, parseInt(searchParams.get("count") ?? "1", 10) || 1);
 
-  const show = getRandomShow(exclude);
-  return NextResponse.json(show);
+  if (count === 1) {
+    return NextResponse.json(getRandomShow(exclude));
+  }
+  return NextResponse.json({ items: getRandomShows(count, exclude) });
 }

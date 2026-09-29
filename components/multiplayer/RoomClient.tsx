@@ -64,6 +64,7 @@ export default function RoomClient({ code }: { code: string }) {
   const [presence, setPresence] = useState<Record<string, PresenceEntry>>({});
   const [isReady, setIsReady] = useState(false);
   const [startError, setStartError] = useState<string | null>(null);
+  const [isStarting, setIsStarting] = useState(false);
 
   const [question, setQuestion] = useState<QuestionData | null>(null);
   const [roundNumber, setRoundNumber] = useState(1);
@@ -288,14 +289,23 @@ export default function RoomClient({ code }: { code: string }) {
 
   const handleStart = async () => {
     setStartError(null);
-    const res = await fetch(`/api/room/${code}/start`, {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ participantId: session?.participantId }),
-    });
-    if (!res.ok) {
-      const data = await res.json().catch(() => ({}));
-      setStartError(data.error ?? "Failed to start game");
+    setIsStarting(true);
+    try {
+      // Every round's question is generated up front here (see start/route.ts) so gameplay
+      // never pauses between rounds — for PriceDrop specifically that means several sequential
+      // real eBay API calls, which can take a good few seconds for a longer game. isStarting
+      // keeps the button showing that instead of looking frozen.
+      const res = await fetch(`/api/room/${code}/start`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ participantId: session?.participantId }),
+      });
+      if (!res.ok) {
+        const data = await res.json().catch(() => ({}));
+        setStartError(data.error ?? "Failed to start game");
+      }
+    } finally {
+      setIsStarting(false);
     }
   };
 
@@ -506,10 +516,14 @@ export default function RoomClient({ code }: { code: string }) {
         {session?.role === "host" && (
           <button
             onClick={handleStart}
-            disabled={!canStart}
+            disabled={!canStart || isStarting}
             className="rounded-xl border border-border bg-surface-raised py-3 font-semibold text-foreground transition hover:border-accent disabled:cursor-not-allowed disabled:opacity-40"
           >
-            {canStart ? "Start Game →" : `Start Game (need ${MIN_READY_TO_START}+ ready)`}
+            {isStarting
+              ? "Starting…"
+              : canStart
+                ? "Start Game →"
+                : `Start Game (need ${MIN_READY_TO_START}+ ready)`}
           </button>
         )}
         {startError && <p className="text-center text-sm text-red-400">{startError}</p>}
