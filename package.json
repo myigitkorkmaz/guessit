@@ -6,7 +6,8 @@
     "dev": "next dev",
     "build": "next build",
     "start": "next start",
-    "lint": "eslint"
+    "lint": "eslint",
+    "typecheck": "tsc --noEmit"
   },
   "dependencies": {
     "@supabase/ssr": "^0.12.5",
@@ -26,5 +27,6 @@
     "playwright": "^1.62.1",
     "tailwindcss": "^4",
     "typescript": "^5"
-  }
+  },
+  "description": "GuessIt — every number is a game. 20+ estimation games with multiplayer rooms."
 }

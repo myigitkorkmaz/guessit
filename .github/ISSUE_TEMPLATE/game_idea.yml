@@ -1,0 +1,23 @@
+name: 🎲 Game idea
+description: Pitch a new "guess the number" game
+labels: [game-idea]
+body:
+  - type: input
+    id: prompt
+    attributes:
+      label: What do players see, and what number do they guess?
+      placeholder: See a bridge — guess its length in meters
+    validations:
+      required: true
+  - type: input
+    id: source
+    attributes:
+      label: Data source
+      description: Where would the answers come from? (Wikidata, a public API, curated list…)
+    validations:
+      required: true
+  - type: textarea
+    id: notes
+    attributes:
+      label: Notes
+      description: Scoring quirks, image source, edge cases (e.g. answers that can be 0).
